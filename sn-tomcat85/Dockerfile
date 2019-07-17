@@ -4,7 +4,7 @@
 #基于OpenJDK的版本:
 #FROM wlp7662973/sn-openjdk8:1
 #基于OracleJDK的版本:
-FROM wlp7662973/sn-oralcejdk8:2
+FROM wlp7662973/sn-oralcejdk8:3
 
 MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
 #Build:docker build -t wlp7662973/sn-tomcat85:43.0.1 ./sn-tomcat85
