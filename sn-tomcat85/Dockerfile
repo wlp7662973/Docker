@@ -12,8 +12,8 @@ MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
 #Test:docker exec -it test_tomcat8 /bin/bash
 #push:docker push wlp7662973/sn-tomcat85:43.0.1
 
-#sn-tomcat85:43.0.x为使用jdk8_u181
-#sn-tomcat85:43.1.x为使用jdk8_u192
+#sn-tomcat85:43.0.x为使用jdk8_u181,使用wlp7662973/sn-oralcejdk8:2
+#sn-tomcat85:43.1.x为使用jdk8_u192,使用wlp7662973/sn-oralcejdk8:3
 
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH:
