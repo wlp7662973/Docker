@@ -9,13 +9,17 @@ MAINTAINER 王立鹏 JDK8 <wanglipeng@snsoft.com.cn>
 #设置语言/字符集
 ENV LANG C.UTF-8
 
-#下载,安装和精简JDK8的最新版
-ENV JAVA_DOWNLOAD=https://n.esnsoft.cn/jdk-8u221-linux-x64.tar.gz
+#下载JDK8的update192版本,该版本为可免费使用的最后版本,稍后切换为亚马逊https://aws.amazon.com/cn/corretto/
+#公司内部地址,上传开源社区注释掉该行地址
+#ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk-8u192-linux-x64.tar.gz"
+#ENV JAVA_DOWNLOAD="http://47.89.49.183:9990/java/jdk-8u192-linux-x64.tar.gz"
+ENV JAVA_DOWNLOAD="https://github.com/frekele/oracle-java/releases/download/8u181-b13/jre-8u181-linux-x64.tar.gz"
+
 
 RUN set -eux; \
     #下载,解压JDK
     mkdir -p /opt && curl -jfkS -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" \
-      -L "${JAVA_DOWNLOAD:-$(curl -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=downloads.tgz)}" \
+      -L "${JAVA_DOWNLOAD:-https://github.com/frekele/oracle-java/releases/download/8u181-b13/jre-8u181-linux-x64.tar.gz}" \
       | tar -xzf - -C /opt \
     && ln -s /opt/jdk1.*.0_* /opt/jdk; \
     ## 清理没用到的文件和库,以精简JDK的体积
@@ -59,8 +63,11 @@ RUN { \
 ENV JAVA_HOME /opt/jdk 
 ENV PATH ${PATH}:/opt/jdk/bin
 
-ENV JAVA_VERSION 8u221
-ENV JAVA_ALPINE_VERSION 8.8u221.0
+#ENV JAVA_VERSION 8u192
+#ENV JAVA_ALPINE_VERSION 8.8u192.12
+
+ENV JAVA_VERSION 8u181
+ENV JAVA_ALPINE_VERSION 8.8u181.13
 
 CMD ["/bin/bash"]
 
