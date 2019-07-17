@@ -7,10 +7,13 @@
 FROM wlp7662973/sn-oralcejdk8:2
 
 MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
-#Build:docker build -t wlp7662973/sn-tomcat85:43 ./sn-tomcat85
-#Test:docker run -it --rm -p 8088:8080 --name test_tomcat8 wlp7662973/sn-tomcat85:43
+#Build:docker build -t wlp7662973/sn-tomcat85:43.0.1 ./sn-tomcat85
+#Test:docker run -it --rm -p 8088:8080 --name test_tomcat8 wlp7662973/sn-tomcat85:43.0.1
 #Test:docker exec -it test_tomcat8 /bin/bash
-#push:docker push wlp7662973/sn-tomcat85:43
+#push:docker push wlp7662973/sn-tomcat85:43.0.1
+
+#sn-tomcat85:43.0.x为使用jdk8_u181
+#sn-tomcat85:43.1.x为使用jdk8_u192
 
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH:
@@ -40,7 +43,7 @@ ENV TOMCAT_SHA512 422eda76c5291a3d5ca5fbd679336997371eef913a6bcf95d17bb5b3ba41a3
 
 ENV TOMCAT_TGZ_URLS \
 # 公司内下载地址,上传开源社区注释掉该行地址
-    https://n.esnsoft.cn/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/apache-tomcat-$TOMCAT_VERSION.tar.gz \
+#    https://n.esnsoft.cn/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/apache-tomcat-$TOMCAT_VERSION.tar.gz \
 # 清华大学镜像
     http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz \
 # 中国国家网信办镜像:
@@ -54,7 +57,7 @@ ENV TOMCAT_TGZ_URLS \
 
 ENV TOMCAT_ASC_URLS \
 # 公司内下载地址,上传开源社区注释掉该行地址
-    https://n.esnsoft.cn/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/apache-tomcat-$TOMCAT_VERSION.tar.gz.asc \
+#    https://n.esnsoft.cn/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/apache-tomcat-$TOMCAT_VERSION.tar.gz.asc \
 # Apache官方地址
 	https://www.apache.org/dyn/closer.cgi?action=download&filename=tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz.asc \
 # 部分国外镜像服务器地址
