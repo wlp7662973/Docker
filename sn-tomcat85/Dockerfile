@@ -39,7 +39,7 @@ ENV TOMCAT_VERSION 8.5.43
 ENV TOMCAT_SHA512 422eda76c5291a3d5ca5fbd679336997371eef913a6bcf95d17bb5b3ba41a3e033c022789cb61a56914be11251492f6c4fced72dbfefb33b31a3b5b0243335c5
 
 ENV TOMCAT_TGZ_URLS \
-# 公司内下载地址
+# 公司内下载地址,上传开源社区注释掉该行地址
     https://n.esnsoft.cn/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/apache-tomcat-$TOMCAT_VERSION.tar.gz \
 # 清华大学镜像
     http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz \
@@ -53,7 +53,7 @@ ENV TOMCAT_TGZ_URLS \
 	https://archive.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 
 ENV TOMCAT_ASC_URLS \
-# 公司内下载地址
+# 公司内下载地址,上传开源社区注释掉该行地址
     https://n.esnsoft.cn/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/apache-tomcat-$TOMCAT_VERSION.tar.gz.asc \
 # Apache官方地址
 	https://www.apache.org/dyn/closer.cgi?action=download&filename=tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz.asc \

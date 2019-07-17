@@ -6,7 +6,7 @@
 FROM wlp7662973/sn-alpine:3
 
 MAINTAINER 王立鹏 JDK8 <wanglipeng@snsoft.com.cn>
-# docker build -t wlp7662973/sn-openjdk8:1 ./sn-openjdk8
+# Build:docker build -t wlp7662973/sn-openjdk8:1 ./sn-openjdk8
 # 测试:docker run -it --rm --name testopenjdk wlp7662973/sn-openjdk8:1
 # push:docker push wlp7662973/sn-openjdk8:1
 
