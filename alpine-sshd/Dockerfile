@@ -10,9 +10,9 @@ MAINTAINER 王立鹏 安装sshd服务 <wanglipeng@snsoft.com.cn>
 ## glibc的下载地址
 ENV GLIBC_TGZ_URLS \
 # 公司内下载地址,上传开源社区注释掉该地址
-    https://n.esnsoft.cn/alpine-pkg-glibc/glibc-2.29-r0.apk
+#    https://n.esnsoft.cn/alpine-pkg-glibc/glibc-2.29-r0.apk
 # sgerrand下载地址
-#    https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-2.29-r0.apk
+    https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-2.29-r0.apk
 
 #安装必要的工具
 RUN set -eux; \
