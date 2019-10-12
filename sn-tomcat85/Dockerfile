@@ -4,7 +4,7 @@
 #基于OpenJDK的版本:
 #FROM wlp7662973/sn-openjdk8:1
 #基于OracleJDK的版本:
-FROM wlp7662973/sn-oralcejdk8:2
+FROM wlp7662973/sn-oralcejdk8:3
 
 MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
 #Build:docker build -t wlp7662973/sn-tomcat85:43.0.1 ./sn-tomcat85
@@ -12,8 +12,8 @@ MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
 #Test:docker exec -it test_tomcat8 /bin/bash
 #push:docker push wlp7662973/sn-tomcat85:43.0.1
 
-#sn-tomcat85:43.0.x为使用jdk8_u181
-#sn-tomcat85:43.1.x为使用jdk8_u192
+#sn-tomcat85:43.0.x为使用jdk8_u181,使用wlp7662973/sn-oralcejdk8:2
+#sn-tomcat85:43.1.x为使用jdk8_u192,使用wlp7662973/sn-oralcejdk8:3
 
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH:
