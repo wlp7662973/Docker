@@ -1,13 +1,15 @@
 #FROM alpine:3.10.1
-FROM wlp7662973/sn-alpine:3
+FROM wlp7662973/sn-alpine:3.11.6
+# 2020年05月12日 升级为基于sn-alpine:3.11.6构建
 
 MAINTAINER 王立鹏 JDK8 <wanglipeng@snsoft.com.cn>
-# Build:docker build -t wlp7662973/sn-oralcejdk8:2 ./sn-oracle_jdk8
-# Test:docker run -it --rm --name testjdk wlp7662973/sn-oralcejdk8:2
-# push:docker push wlp7662973/sn-oralcejdk8:2
+# Build:docker build -t wlp7662973/sn-oralcejdk8:3.11.6 ./sn-oracle_jdk8
+# Test:docker run -it --rm --name testjdk wlp7662973/sn-oralcejdk8:3.11.6
+# push:docker push wlp7662973/sn-oralcejdk8:3.11.6
 
 #设置语言/字符集
-ENV LANG C.UTF-8
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
 
 #下载JDK8的update192版本,该版本为可免费使用的最后版本,稍后切换为亚马逊https://aws.amazon.com/cn/corretto/
 #公司内部地址,上传开源社区注释掉该行地址
@@ -15,7 +17,7 @@ ENV LANG C.UTF-8
 
 RUN set -eux; \
     #下载,解压JDK
-    mkdir -p /opt && curl -jfkS -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" \
+    mkdir -p /opt && mkdir -p /data/packages && curl -jfkS -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" \
       -L "${JAVA_DOWNLOAD:-https://github.com/frekele/oracle-java/releases/download/8u181-b13/jdk-8u181-linux-x64.tar.gz}" \
       | tar -xzf - -C /opt \
     && ln -s /opt/jdk1.*.0_* /opt/jdk; \
@@ -65,6 +67,10 @@ ENV PATH ${PATH}:/opt/jdk/bin
 
 ENV JAVA_VERSION 8u181
 ENV JAVA_ALPINE_VERSION 8.8u181.13
+
+EXPOSE 8000 8444 20880 20881 20882
+
+VOLUME ["/data/packages"]
 
 CMD ["/bin/bash"]
 
