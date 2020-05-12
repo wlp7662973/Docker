@@ -13,7 +13,7 @@ ENV LANG=en_US.UTF-8 \
 
 #下载JDK8的update192版本,该版本为可免费使用的最后版本,稍后切换为亚马逊https://aws.amazon.com/cn/corretto/
 #公司内部地址,上传开源社区注释掉该行地址
-#ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk-8u192-linux-x64.tar.gz"
+ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk-8u192-linux-x64.tar.gz"
 
 RUN set -eux; \
     #下载,解压JDK
@@ -62,11 +62,11 @@ RUN { \
 ENV JAVA_HOME /opt/jdk 
 ENV PATH ${PATH}:/opt/jdk/bin
 
-#ENV JAVA_VERSION 8u192
-#ENV JAVA_ALPINE_VERSION 8.8u192.12
+ENV JAVA_VERSION 8u192
+ENV JAVA_ALPINE_VERSION 8.8u192.12
 
-ENV JAVA_VERSION 8u181
-ENV JAVA_ALPINE_VERSION 8.8u181.13
+#ENV JAVA_VERSION 8u181
+#ENV JAVA_ALPINE_VERSION 8.8u181.13
 
 EXPOSE 8000 8444 20880 20881 20882
 
