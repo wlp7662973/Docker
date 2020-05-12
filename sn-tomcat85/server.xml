@@ -182,7 +182,7 @@
             </Realm>
 
             <Host name="localhost" appBase="webapps"
-                  unpackWARs="false" autoDeploy="false" reloadable="false">
+                  unpackWARs="true" autoDeploy="false" reloadable="false">
 
                 <!-- SingleSignOn valve, share authentication between web applications
                      Documentation at: /docs/config/valve.html -->
@@ -195,7 +195,7 @@
                      Note: The pattern used is equivalent to using pattern="common" -->
                 <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                        prefix="localhost_access_log" suffix=".txt"
-                       pattern="%h %l %u %t &quot;%r&quot; %s %b"/>
+                       pattern="%h %l %u %t &quot;%r&quot; %s %b" />
 
             </Host>
         </Engine>
