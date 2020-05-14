@@ -13,12 +13,12 @@ ENV LANG=en_US.UTF-8 \
 
 #下载JDK8的update192版本,该版本为可免费使用的最后版本,稍后切换为亚马逊https://aws.amazon.com/cn/corretto/
 #公司内部地址,上传开源社区注释掉该行地址
-ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk-8u192-linux-x64.tar.gz"
+#ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk-8u192-linux-x64.tar.gz"
 
 RUN set -eux; \
     #下载,解压JDK
-    mkdir -p /opt && mkdir -p /data/packages && curl -jfkS -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" \
-      -L "${JAVA_DOWNLOAD:-https://github.com/frekele/oracle-java/releases/download/8u181-b13/jdk-8u181-linux-x64.tar.gz}" \
+    mkdir -p /opt && mkdir -p /data/packages && mkdir -p /var/log/snlog && mkdir -p /etc/snconfig && curl -jfkS -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" \
+      -L "${JAVA_DOWNLOAD:-https://github.com/wlp7662973/oracle-java/releases/download/8u192/jdk-8u192-linux-x64.tar.gz}" \
       | tar -xzf - -C /opt \
     && ln -s /opt/jdk1.*.0_* /opt/jdk; \
     ## 清理没用到的文件和库,以精简JDK的体积
@@ -45,18 +45,17 @@ RUN set -eux; \
     ##解决 新版Tomcat的Native编译后,运行报错:"libc.musl-x86_64.so.1: cannot open shared object file: No such file or directory"等类似错误
     ln -s /lib/libc.musl-x86_64.so.1 /usr/lib/libc.musl-x86_64.so.1; \
     ln -s /lib/libz.so.1 /usr/lib/libz.so.1; \
-    ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1
+    ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1; \
+    #预制一个脚本,tomcat打包使用
+    { \
+        echo '#!/bin/sh'; \
+        echo 'set -e'; \
+        echo; \
+        echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
+    } > /usr/local/bin/docker-java-home \
+    && chmod +x /usr/local/bin/docker-java-home
 
 ADD java.security /opt/jdk/jre/lib/security/java.security
-
-#预制一个脚本,tomcat打包使用
-RUN { \
-		echo '#!/bin/sh'; \
-		echo 'set -e'; \
-		echo; \
-		echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
-	} > /usr/local/bin/docker-java-home \
-	&& chmod +x /usr/local/bin/docker-java-home
 
 #设置环境变量
 ENV JAVA_HOME /opt/jdk 
@@ -68,9 +67,9 @@ ENV JAVA_ALPINE_VERSION 8.8u192.12
 #ENV JAVA_VERSION 8u181
 #ENV JAVA_ALPINE_VERSION 8.8u181.13
 
-EXPOSE 8000 8444 20880 20881 20882
+EXPOSE 8000 8444 20880 20881 20882 20883
 
-VOLUME ["/data/packages"]
+VOLUME ["/data/packages","/etc/snconfig","/var/log/snlog"]
 
 CMD ["/bin/bash"]
 
