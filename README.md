@@ -31,6 +31,8 @@ sn-openjdk8目前最新版本:`wlp7662973/sn-openjdk8:1`<br/>
 ## sn-oracle_jdk8
 `sn-oralcejdk8:3`的最新版本:<br/>
 `wlp7662973/sn-oralcejdk8:3.11.6` 使用Oracle JDK8 u192版本创建 基于最新的sn-alpine:3.11.6构建,支持了en_US.UTF-8字符集<br/>
+`wlp7662973/sn-oralcejdk8:3.11.6-ext`使用基于`wlp7662973/sn-oralcejdk8:3.11.6`<br/>
+安装了GraphicsMagick和Tesseract-OCR两个软件包<br/>
 
 sn-openjdk8目前有两个版本:<br/>
 `wlp7662973/sn-oralcejdk8:2` 使用Oracle JDK8 u181版本创建<br/>
