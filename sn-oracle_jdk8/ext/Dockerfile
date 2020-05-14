@@ -4,8 +4,8 @@ FROM wlp7662973/sn-oralcejdk8:3.11.6
 
 MAINTAINER 王立鹏 Oracle JDK8 <wanglipeng@snsoft.com.cn>
 # Build:docker build -t wlp7662973/sn-oralcejdk8:3.11.6-ext ./sn-oracle_jdk8/ext
-# Test:docker run -it --rm --name testjdk wlp7662973/sn-oralcejdk8:3.11.6
-# push:docker push wlp7662973/sn-oralcejdk8:3.11.6
+# Test:docker run -it --rm --name testjdk wlp7662973/sn-oralcejdk8:3.11.6-ext
+# push:docker push wlp7662973/sn-oralcejdk8:3.11.6-ext
 
 RUN set -eux; \
     apk add --no-cache graphicsmagick tesseract-ocr; \
