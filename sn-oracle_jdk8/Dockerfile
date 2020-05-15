@@ -2,23 +2,30 @@
 FROM wlp7662973/sn-alpine:3.11.6
 # 2020年05月12日 升级为基于sn-alpine:3.11.6构建
 
-MAINTAINER 王立鹏 OrJDK8 <wanglipeng@snsoft.com.cn>
-# Build:docker build -t wlp7662973/sn-oralcejdk8:3.11.6 ./sn-oracle_jdk8
-# Test:docker run -it --rm --name testjdk wlp7662973/sn-oralcejdk8:3.11.6
-# push:docker push wlp7662973/sn-oralcejdk8:3.11.6
+MAINTAINER 王立鹏 Oracle JDK8 <wanglipeng@snsoft.com.cn>
+# Build:docker build -t wlp7662973/sn-oralcejdk8:3.11.6.202 ./sn-oracle_jdk8
+# Test:docker run -it --rm --name testjdk wlp7662973/sn-oralcejdk8:3.11.6.202
+# push:docker push wlp7662973/sn-oralcejdk8:3.11.6.202
 
 #设置语言/字符集
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
 
+#设置环境变量
+ENV JAVA_HOME /opt/jdk
+ENV PATH ${PATH}:/opt/jdk/bin
+
+ENV JAVA_VERSION 8u202
+ENV JAVA_ALPINE_VERSION 8.8u202.08
+
 #下载JDK8的update192版本,该版本为可免费使用的最后版本,稍后切换为亚马逊https://aws.amazon.com/cn/corretto/
 #公司内部地址,上传开源社区注释掉该行地址
-#ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk-8u192-linux-x64.tar.gz"
+#ENV JAVA_DOWNLOAD="https://n.esnsoft.cn/jdk/jdk-8u202-linux-x64.tar.gz"
 
 RUN set -eux; \
     #下载,解压JDK
     mkdir -p /opt && mkdir -p /data/packages && mkdir -p /var/log/snlog && mkdir -p /etc/snconfig && curl -jfkS -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" \
-      -L "${JAVA_DOWNLOAD:-https://github.com/wlp7662973/oracle-java/releases/download/8u192/jdk-8u192-linux-x64.tar.gz}" \
+      -L "${JAVA_DOWNLOAD:-https://github.com/wlp7662973/oracle-java/releases/download/8u202/jdk-8u202-linux-x64.tar.gz}" \
       | tar -xzf - -C /opt \
     && ln -s /opt/jdk1.*.0_* /opt/jdk; \
     ## 清理没用到的文件和库,以精简JDK的体积
@@ -53,19 +60,15 @@ RUN set -eux; \
         echo; \
         echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
     } > /usr/local/bin/docker-java-home \
-    && chmod +x /usr/local/bin/docker-java-home
+    && chmod +x /usr/local/bin/docker-java-home; \
+    # https://github.com/docker-library/openjdk/issues/212#issuecomment-420979840
+    # https://openjdk.java.net/jeps/341
+    java -Xshare:dump; \
+    # 基础测试
+    java -version; \
+    javac -version
 
 ADD java.security /opt/jdk/jre/lib/security/java.security
-
-#设置环境变量
-ENV JAVA_HOME /opt/jdk 
-ENV PATH ${PATH}:/opt/jdk/bin
-
-ENV JAVA_VERSION 8u192
-ENV JAVA_ALPINE_VERSION 8.8u192.12
-
-#ENV JAVA_VERSION 8u181
-#ENV JAVA_ALPINE_VERSION 8.8u181.13
 
 EXPOSE 8000 8444 20880 20881 20882 20883
 
