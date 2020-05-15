@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -71,12 +71,12 @@
              APR (HTTP/AJP) Connector: /docs/apr.html
              Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
         -->
-        <!-- minSpareThreads一般为maxThreads的25%~30%或者略高
+        <!-- minSpareThreads一般为maxThreads的20%~30%或者略高
             maxQueueSize一般不超过maxThreads的30%值
             prestartminSpareThreads="true"与minSpareThreads需要配合使用
         -->
-        <Executor name="tomcatThreadPool" namePrefix="req-exec-"
-                  maxThreads="380"
+        <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
+                  maxThreads="420"
                   minSpareThreads="100"
                   prestartminSpareThreads="true"
                   maxQueueSize="120"
@@ -108,25 +108,30 @@
               export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/apr/lib
               source该文件,使其生效
               或者在tomcat的setenv.sh中加入,均可.
-
               检查:日志中出现using APR version [1.x.x]即可
+              2020年5月15日:
+              protocol="HTTP/1.1"=>org.apache.coyote.http11.Http11Nio2Protocol(提高性能)
+              maxPostSize=>10485760(默认2M,改为10M,配合Chrome/Safari地址长度支持8M)
+              processorCache="8000"=>20000(配合现在主流处理器性能提升)
+              移除压缩参数,压缩改为由Nginx来处理:
+              compression="on"
+              compressionMinSize="2048"
+              compressableMimeType="text/html,text/plain,text/css,application/javascript,application/json,application/x-font-ttf,application/x-font-otf,image/svg+xml"
         -->
         <Connector port="8080"
-                   protocol="HTTP/1.1"
+                   redirectPort="8443"
+                   protocol="org.apache.coyote.http11.Http11Nio2Protocol"
                    URIEncoding="UTF-8"
                    executor="tomcatThreadPool"
-                   connectionTimeout="12000"
-                   maxConnections="8000"
+                   connectionTimeout="20000"
+                   maxConnections="10000"
                    enableLookups="false"
-                   redirectPort="8443"
-                   acceptCount="240"
+                   acceptCount="128"
+                   maxPostSize="10485760"
                    maxHttpHeaderSize="8192"
                    disableUploadTimeout="true"
-                   compression="on"
-                   compressionMinSize="2048"
-                   compressableMimeType="text/html,text/plain,text/css,application/javascript,application/json,application/x-font-ttf,application/x-font-otf,image/svg+xml"
                    acceptorThreadCount="2"
-                   processorCache="8000"
+                   processorCache="20000"
                    tcpNoDelay="true"
                    server="SNsoft JavaEE Server"
         />
@@ -137,19 +142,48 @@
                    connectionTimeout="20000"
                    redirectPort="8443" />
         -->
-        <!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443
-             This connector uses the NIO implementation that requires the JSSE
-             style configuration. When using the APR/native implementation, the
-             OpenSSL style configuration is required as described in the APR/native
-             documentation -->
+        <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443
+             This connector uses the NIO implementation. The default
+             SSLImplementation will depend on the presence of the APR/native
+             library and the useOpenSSL attribute of the
+             AprLifecycleListener.
+             Either JSSE or OpenSSL style configuration may be used regardless of
+             the SSLImplementation selected. JSSE style configuration is used below.
+        -->
         <!--
         <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
-                   maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
-                   clientAuth="false" sslProtocol="TLS" />
+                   maxThreads="150" SSLEnabled="true">
+            <SSLHostConfig>
+                <Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+                             type="RSA" />
+            </SSLHostConfig>
+        </Connector>
+        -->
+        <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
+             This connector uses the APR/native implementation which always uses
+             OpenSSL for TLS.
+             Either JSSE or OpenSSL style configuration may be used. OpenSSL style
+             configuration is used below.
+        -->
+        <!--
+        <Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
+                   maxThreads="150" SSLEnabled="true" >
+            <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+            <SSLHostConfig>
+                <Certificate certificateKeyFile="conf/localhost-rsa-key.pem"
+                             certificateFile="conf/localhost-rsa-cert.pem"
+                             certificateChainFile="conf/localhost-rsa-chain.pem"
+                             type="RSA" />
+            </SSLHostConfig>
+        </Connector>
         -->
 
-        <!-- Define an AJP 1.3 Connector on port 8009
-        <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+        <!-- Define an AJP 1.3 Connector on port 8009 -->
+        <!--
+        <Connector protocol="AJP/1.3"
+                   address="::1"
+                   port="8009"
+                   redirectPort="8443" />
         -->
 
         <!-- An Engine represents the entry point (within Catalina) that processes
@@ -189,7 +223,6 @@
                 <!--
                 <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
                 -->
-
                 <!-- Access log processes all example.
                      Documentation at: /docs/config/valve.html
                      Note: The pattern used is equivalent to using pattern="common" -->
