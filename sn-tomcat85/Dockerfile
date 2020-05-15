@@ -9,8 +9,8 @@ FROM wlp7662973/sn-oralcejdk8:3.11.6.202
 
 MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
 #Build:docker build -t wlp7662973/sn-tomcat85:55.2.1 ./sn-tomcat85
-#Test:docker run -it --rm -p 8088:8080 --name test_tomcat8 wlp7662973/sn-tomcat85:55.2.1
-#Test:docker exec -it test_tomcat8 /bin/bash
+#Test:docker run -it --rm -p 8088:8080 --name test_tomcat85 wlp7662973/sn-tomcat85:55.2.1
+#Test:docker exec -it test_tomcat85 /bin/bash
 #push:docker push wlp7662973/sn-tomcat85:55.2.1
 
 #sn-tomcat85:43.0.x为使用jdk8_u181,基于wlp7662973/sn-oralcejdk8:2
