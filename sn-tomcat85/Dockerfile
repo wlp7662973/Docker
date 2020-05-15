@@ -4,20 +4,21 @@
 #基于OpenJDK的版本:
 #FROM wlp7662973/sn-openjdk8:1
 #基于OracleJDK的版本:
-FROM wlp7662973/sn-oralcejdk8:3.11.6
+FROM wlp7662973/sn-oralcejdk8:3.11.6.202
 # 2020年05月12日 升级为基于sn-oralcejdk8:3.11.6构建
 
 MAINTAINER 王立鹏 TOMCAT8.5.x <wanglipeng@snsoft.com.cn>
-#Build:docker build -t wlp7662973/sn-tomcat85:55.1.1 ./sn-tomcat85
-#Test:docker run -it --rm -p 8088:8080 --name test_tomcat8 wlp7662973/sn-tomcat85:55.1.1
+#Build:docker build -t wlp7662973/sn-tomcat85:55.2.1 ./sn-tomcat85
+#Test:docker run -it --rm -p 8088:8080 --name test_tomcat8 wlp7662973/sn-tomcat85:55.2.1
 #Test:docker exec -it test_tomcat8 /bin/bash
-#push:docker push wlp7662973/sn-tomcat85:55.1.1
+#push:docker push wlp7662973/sn-tomcat85:55.2.1
 
-#sn-tomcat85:43.0.x为使用jdk8_u181,使用wlp7662973/sn-oralcejdk8:2
-#sn-tomcat85:43.1.x为使用jdk8_u192,使用wlp7662973/sn-oralcejdk8:3
+#sn-tomcat85:43.0.x为使用jdk8_u181,基于wlp7662973/sn-oralcejdk8:2
+#sn-tomcat85:43.1.x为使用jdk8_u192,基于wlp7662973/sn-oralcejdk8:3
 
-#sn-tomcat85:54.1.x为使用jdk8_u192,使用wlp7662973/sn-oralcejdk8:3.11.6
-#sn-tomcat85:55.1.x为使用jdk8_u192,使用wlp7662973/sn-oralcejdk8:3.11.6
+#sn-tomcat85:54.1.x为使用jdk8_u192,基于wlp7662973/sn-oralcejdk8:3.11.6
+#sn-tomcat85:55.1.x为使用jdk8_u192,基于wlp7662973/sn-oralcejdk8:3.11.6
+#sn-tomcat85:55.2.x为使用jdk8_u202,基于wlp7662973/sn-oralcejdk8:3.11.6.202
 
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH:
