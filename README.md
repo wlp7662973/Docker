@@ -50,11 +50,14 @@ JDK8 Update192:`wlp7662973/sn-oralcejdk8:3.11.6` `wlp7662973/sn-oralcejdk8:3.11.
 
 # tomcat 8.5
 最新活跃版本:<br/>
-`wlp7662973/sn-tomcat85:55.2.1` `wlp7662973/sn-tomcat85:55.2.1-ext`<br/>
+`wlp7662973/sn-tomcat85:55.2.2`,`wlp7662973/sn-tomcat85:55.2.2-ext`<br/>
 
 ## sn-tomcat85
 ### `sn-tomcat85:xx.2.x`的最新版本:<br/>
 使用`Tomcat 8.5.55`版本创建<br/>
+`wlp7662973/sn-tomcat85:55.2.2`,`wlp7662973/sn-tomcat85:55.2.2-ext`<br/>
+这两版分别对上一版本,修改了Tomcat的参数maxPostSize设置为"-1"<br/>
+<br/>
 `wlp7662973/sn-tomcat85:55.2.1`使用基于`wlp7662973/sn-oralcejdk8:3.11.6.202`.<br/>
 使用Oralce JDK 8u202版本,支持了en_US.UTF-8字符集<br/>
 `wlp7662973/sn-tomcat85:55.2.1-ext`使用基于`wlp7662973/sn-tomcat85:55.2.1`.<br/>
@@ -86,11 +89,14 @@ JDK8 Update192:`wlp7662973/sn-oralcejdk8:3.11.6` `wlp7662973/sn-oralcejdk8:3.11.
 
 # tomcat 9.0
 最新活跃版本:<br/>
-`wlp7662973/sn-tomcat90:35.2.1` `wlp7662973/sn-tomcat90:35.2.1-ext`<br/>
+`wlp7662973/sn-tomcat90:35.2.2`,`wlp7662973/sn-tomcat90:35.2.2-ext`<br/>
 
 ## sn-tomcat90
 ### `sn-tomcat90:xx.2.x`的最新版本:<br/>
 使用`Tomcat tomcat9.0.35`版本创建<br/>
+`wlp7662973/sn-tomcat90:35.2.2`,`wlp7662973/sn-tomcat90:35.2.2-ext`<br/>
+这两版分别对上一版本,修改了Tomcat的参数maxPostSize设置为"-1"<br/>
+<br/>
 `wlp7662973/sn-tomcat90:35.2.1`使用基于`wlp7662973/sn-oralcejdk8:3.11.6.202`.<br/>
 使用Oralce JDK 8u202版本,支持了en_US.UTF-8字符集<br/>
 `wlp7662973/sn-tomcat90:35.2.1-ext`使用基于`wlp7662973/sn-tomcat90:35.2.1`.<br/>

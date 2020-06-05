@@ -127,7 +127,7 @@
                    maxConnections="10000"
                    enableLookups="false"
                    acceptCount="128"
-                   maxPostSize="10485760"
+                   maxPostSize="-1"
                    maxHttpHeaderSize="8192"
                    disableUploadTimeout="true"
                    acceptorThreadCount="2"
