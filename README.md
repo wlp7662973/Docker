@@ -78,8 +78,8 @@ JDK8 Update192:`wlp7662973/sn-oralcejdk8:3.11.6` `wlp7662973/sn-oralcejdk8:3.11.
 默认端口:8080<br/>
 
 #### 测试:<br/>
-`docker run -it --rm -p 8088:8080 --name test_tomcat85 wlp7662973/sn-tomcat85:55.2.1`<br/>
-`docker run -it --rm -p 8088:8080 --name test_tomcat85 wlp7662973/sn-tomcat85:55.2.1-ext`<br/>
+`docker run -it --rm -p 8088:8080 --name test_tomcat85 wlp7662973/sn-tomcat85:55.2.2`<br/>
+`docker run -it --rm -p 8088:8080 --name test_tomcat85 wlp7662973/sn-tomcat85:55.2.2-ext`<br/>
 `docker exec -it test_tomcat85 /bin/bash`<br/>
 #### GraphicsMagick命令:<br/>
 `gm version`<br/>
@@ -105,8 +105,8 @@ JDK8 Update192:`wlp7662973/sn-oralcejdk8:3.11.6` `wlp7662973/sn-oralcejdk8:3.11.
 默认端口:8080<br/>
 
 #### 测试:<br/>
-`docker run -it --rm -p 8088:8080 --name test_tomcat90 wlp7662973/sn-tomcat90:35.2.1`<br/>
-`docker run -it --rm -p 8088:8080 --name test_tomcat90 wlp7662973/sn-tomcat90:35.2.1-ext`<br/>
+`docker run -it --rm -p 8088:8080 --name test_tomcat90 wlp7662973/sn-tomcat90:35.2.2`<br/>
+`docker run -it --rm -p 8088:8080 --name test_tomcat90 wlp7662973/sn-tomcat90:35.2.2-ext`<br/>
 `docker exec -it test_tomcat90 /bin/bash`<br/>
 #### GraphicsMagick命令:<br/>
 `gm version`<br/>
