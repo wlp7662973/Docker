@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- Note:  A "Server" is not itself a "Container", so you may not
+     define subcomponents such as "Valves" at this level.
+     Documentation at /docs/config/server.html
+ -->
+<!-- 8005端口绝不可开公网访问,否则telnet上来发SHUTDOWN服务就关了 ====王立鹏 2016年05月02日 -->
+<Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <!-- Security listener. Documentation at /docs/config/listeners.html
+  <Listener className="org.apache.catalina.security.SecurityListener" />
+  -->
+  <!-- APR library loader. Documentation at /docs/apr.html -->
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <!-- Global JNDI resources
+       Documentation at /docs/jndi-resources-howto.html
+  -->
+  <GlobalNamingResources>
+    <!-- Editable user database that can also be used by
+         UserDatabaseRealm to authenticate users
+    -->
+    <!-- 删除webapps下的manager和host-manager和examples
+           删除conf/tomcat-users.xml中的默认密码
+       -->
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <!-- A "Service" is a collection of one or more "Connectors" that share
+       a single "Container" Note:  A "Service" is not itself a "Container",
+       so you may not define subcomponents such as "Valves" at this level.
+       Documentation at /docs/config/service.html
+   -->
+  <Service name="Catalina">
+
+    <!--The connectors can use a shared executor, you can define one or more named thread pools-->
+    <!--
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
+        maxThreads="150" minSpareThreads="4"/>
+    -->
+
+
+    <!-- A "Connector" represents an endpoint by which requests are received
+         and responses are returned. Documentation at :
+         Java HTTP Connector: /docs/config/http.html
+         Java AJP  Connector: /docs/config/ajp.html
+         APR (HTTP/AJP) Connector: /docs/apr.html
+         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
+    -->
+    <!-- minSpareThreads一般为maxThreads的20%~30%或者略高
+            maxQueueSize一般不超过maxThreads的30%值
+            prestartminSpareThreads="true"与minSpareThreads需要配合使用
+        -->
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
+              maxThreads="420"
+              minSpareThreads="100"
+              prestartminSpareThreads="true"
+              maxQueueSize="120"
+              maxIdleTime="60000"/>
+    <!-- acceptCount一般照maxQueueSize上浮100%以内
+            maxHttpHeaderSize按照需要设置
+            compression会耗费一定的CPU,但可大量节约网络传输量,建议移动端项目务必开启!!!同时也可以使用Nginx设置该功能,但是不建议,Tomcat进行压缩CPU压力更分散,具体看部署环境情况而定,
+                  compression与compressionMinSize和compressableMimeType配合使用,合理设置参数值.
+            acceptorThreadCount视应用情况,与CPU核数而定,永远不要超过CPU物理核心数的一半,无视CPU超线程特性;虚拟机不要超过2
+            processorCache视程序是否使用Servlet3.0新特性而定义,不要超过maxConnections的二倍.
+            server可以同时配合修改/usr/local/tomcat/lib/catalina.jar中的org/apache/catalina/util/ServerInfo.properties配置文件,抹除Tomcat版本信息,避免特定版本漏洞定向攻击
+          系统:
+          RHEL系操作系统注意sysctl的net.core.somaxconn设置!!! 务必要求操作系统管理人员查看这项配置,千万不能是默认值128!!!
+          net.ipv4.ip_local_port_range参数;limits.conf的soft/hard等设置参加系统配置参数说明文档.
+          sysctl -p注意检查系统open files的设置值!
+          客户操作系统给到我们的用户如可sudo操作,可进行如下优化:
+              放弃nio,而使用apr模式,使用apr必须规矩的编译安装Tomcat的Native启动(服务)程序.
+              即:首先删除protocol="org.apache.coyote.http11.Http11Nio2Protocol"属性,改为protocol="HTTP/1.1"
+              然后安装apr,ubuntu下使用源码安装即可,RHEL系使用sudo yum -y install apr apr-devel命令也可以
+              加载bridge模块
+              然后进入/opt/tomcat-8.5.xxx/bin/,找到tomcat-native.tar.gz,解压之...
+              cd到tomcat-native-1.2.xxxx-src/jni/native
+              (下面命令中,将==替换为两个-)
+              执行配置命令./configure ==with-apr=/usr/bin/apr-1-config ==with-java-home=/usr/java/latest
+              make
+              make install
+
+              在/etc/profile后面增加内容:
+              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/apr/lib
+              source该文件,使其生效
+              或者在tomcat的setenv.sh中加入,均可.
+              检查:日志中出现using APR version [1.x.x]即可
+              2020年5月15日:
+              protocol="HTTP/1.1"=>org.apache.coyote.http11.Http11Nio2Protocol(提高性能)
+              maxPostSize=>10485760(默认2M,改为10M,配合Chrome/Safari地址长度支持8M)
+              processorCache="8000"=>20000(配合现在主流处理器性能提升)
+              移除压缩参数,压缩改为由Nginx来处理:
+              compression="on"
+              compressionMinSize="2048"
+              compressableMimeType="text/html,text/plain,text/css,application/javascript,application/json,application/x-font-ttf,application/x-font-otf,image/svg+xml"
+        -->
+    <Connector port="8080"
+               redirectPort="8443"
+               protocol="org.apache.coyote.http11.Http11Nio2Protocol"
+               URIEncoding="UTF-8"
+               executor="tomcatThreadPool"
+               connectionTimeout="20000"
+               maxConnections="10000"
+               enableLookups="false"
+               acceptCount="128"
+               maxPostSize="-1"
+               maxHttpHeaderSize="8192"
+               disableUploadTimeout="true"
+               acceptorThreadCount="2"
+               processorCache="20000"
+               tcpNoDelay="true"
+               server="SNsoft JavaEE Server"
+    />
+
+    <!-- A "Connector" using the shared thread pool-->
+    <!--
+    <Connector executor="tomcatThreadPool"
+               port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+    -->
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443
+         This connector uses the NIO implementation. The default
+         SSLImplementation will depend on the presence of the APR/native
+         library and the useOpenSSL attribute of the
+         AprLifecycleListener.
+         Either JSSE or OpenSSL style configuration may be used regardless of
+         the SSLImplementation selected. JSSE style configuration is used below.
+    -->
+    <!--
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig>
+            <Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    -->
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
+         This connector uses the APR/native implementation which always uses
+         OpenSSL for TLS.
+         Either JSSE or OpenSSL style configuration may be used. OpenSSL style
+         configuration is used below.
+    -->
+    <!--
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
+               maxThreads="150" SSLEnabled="true" >
+        <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        <SSLHostConfig>
+            <Certificate certificateKeyFile="conf/localhost-rsa-key.pem"
+                         certificateFile="conf/localhost-rsa-cert.pem"
+                         certificateChainFile="conf/localhost-rsa-chain.pem"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    -->
+
+    <!-- Define an AJP 1.3 Connector on port 8009 -->
+    <!--
+    <Connector protocol="AJP/1.3"
+               address="::1"
+               port="8009"
+               redirectPort="8443" />
+    -->
+
+    <!-- An Engine represents the entry point (within Catalina) that processes
+         every request.  The Engine implementation for Tomcat stand alone
+         analyzes the HTTP headers included with the request, and passes them
+         on to the appropriate Host (virtual host).
+         Documentation at /docs/config/engine.html -->
+
+    <!-- You should set jvmRoute to support load-balancing via AJP ie :
+    <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
+    -->
+    <Engine name="Catalina" defaultHost="localhost">
+
+      <!--For clustering, please take a look at documentation at:
+          /docs/cluster-howto.html  (simple how to)
+          /docs/config/cluster.html (reference documentation) -->
+      <!--
+      <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+      -->
+
+      <!-- Use the LockOutRealm to prevent attempts to guess user passwords
+           via a brute-force attack -->
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <!-- This Realm uses the UserDatabase configured in the global JNDI
+             resources under the key "UserDatabase".  Any edits
+             that are performed against this UserDatabase are immediately
+             available for use by the Realm.  -->
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+
+        <!-- SingleSignOn valve, share authentication between web applications
+             Documentation at: /docs/config/valve.html -->
+        <!--
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+        -->
+
+        <!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
