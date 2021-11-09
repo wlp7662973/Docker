@@ -3,8 +3,7 @@ FROM ubuntu:20.04
 
 MAINTAINER 王立鹏 强化ubuntu <wanglipeng@snsoft.com.cn>
 # Build:docker build -t wlp7662973/sn-ubuntu:20.04 ./sn-ubuntu
-# 测试:docker run -it --rm --name test_os wlp7662973/sn-ubuntu:20.04
-# docker run -it --rm --name test_os ubuntu:20.04 /bin/bash
+# 测试:docker run -it --rm --name test_os wlp7662973/sn-ubuntu:20.04 /bin/bash
 # push:docker push wlp7662973/sn-ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -20,6 +19,8 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/* ; \
 	# 设置时区为Shanghai,设置完时区,删除tzdata
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
+    # 将本机时区配置文件, 设置为Asia/Shanghai(很多第三方软件, 会读取这个文件)
+    echo 'Asia/Shanghai' >/etc/timezone; \
 	# 创建ll命令
 	{ \
 	    echo 'alias ll="ls -l --color=auto"'; \
