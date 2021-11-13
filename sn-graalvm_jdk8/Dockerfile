@@ -43,6 +43,22 @@ RUN set -eux; \
         echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
     } > /usr/local/bin/docker-java-home \
     && chmod +x /usr/local/bin/docker-java-home; \
+    #预制一个脚本,springboot的jar包启动使用
+    { \
+        echo '#!/bin/sh'; \
+        echo 'set -e'; \
+        echo; \
+        echo 'echo Java位置:$JAVA_HOME'; \
+        echo 'jarFile=`find /srv -name *.jar`'; \
+        echo 'echo 运行文件为:$jarFile'; \
+        echo 'echo 正在等待依赖的程序启动...'; \
+        echo '/wait'; \
+        echo '$JAVA_HOME/bin/java $JAVA_OPTS -jar $jarFile'; \
+    } > /srv/runjar.sh \
+    && chmod +x /srv/runjar.sh; \
+    #创建snsoft的默认数据(附件目录) \
+    mkdir -p /data; \
+    chmod 777 /data; \
     # https://github.com/docker-library/openjdk/issues/212#issuecomment-420979840
     # https://openjdk.java.net/jeps/341
     java -Xshare:dump; \
@@ -52,7 +68,7 @@ RUN set -eux; \
 
 ADD java.security /opt/jdk/jre/lib/security/java.security
 
-EXPOSE 8000 8444 20880 20881 20882 20883
+EXPOSE 8000 8080 8444 20880 20881 20882 20883 20884 20886
 
 VOLUME ["/etc/snconfig","/var/log/snlog"]
 

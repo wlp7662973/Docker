@@ -26,9 +26,6 @@ ENV TOMCAT_MAJOR 9
 ENV TOMCAT_VERSION 9.0.54
 ENV TOMCAT_SHA512 83430f24d42186ce2ff51eeef2f7a5517048f37d9050c45cac1e3dba8926d61a1f7f5aba122a34a11ac1dbdd3c1f6d98671841047df139394d43751263de57c3
 
-# 预制一个wait文件, 来自https://github.com/ufoscout/docker-compose-wait
-ADD wait /wait
-
 RUN set -eux; \
     # 安装必要的依赖,主要是OpenJDK的需要,sn-oralcejdk8镜像已经安装过了.
 	\
@@ -158,9 +155,6 @@ RUN set -eux; \
 	mkdir -p /var/log/snlog; \
 	#创建snsoft的标准配置目录
 	mkdir -p /etc/snconfig; \
-    #创建snsoft的默认数据(附件目录)
-    mkdir -p /data; \
-    chmod 777 /data; \
     # 测试,输出Tomcat版本 \
     \
 # smoke test
@@ -183,6 +177,6 @@ ADD index.html $CATALINA_HOME/webapps/ROOT/index.html
 
 VOLUME ["/etc/snconfig","/data","/var/log/snlog","/usr/local/tomcat/logs"]
 
-EXPOSE 8080 8444 20880 20881 20882 20883 20884 20886
+EXPOSE 8000 8080 8444 20880 20881 20882 20883 20884 20886
 
 CMD ["catalina.sh", "run"]
