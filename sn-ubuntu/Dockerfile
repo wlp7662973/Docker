@@ -23,9 +23,12 @@ RUN set -eux; \
     echo 'Asia/Shanghai' >/etc/timezone; \
 	# 创建ll命令
 	{ \
-	    echo 'alias ll="ls -l --color=auto"'; \
+	    echo 'alias ll="ls -lh --color=auto"'; \
 	    echo 'alias ls="ls --color=auto"'; \
 	} > /root/.bashrc \
 	&& chmod +x /root/.bashrc
+
+# 预制一个wait文件, 来自https://github.com/ufoscout/docker-compose-wait
+ADD wait /wait
 
 CMD ["/bin/bash"]
